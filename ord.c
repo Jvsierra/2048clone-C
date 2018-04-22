@@ -12,26 +12,26 @@ int matriz[TAMANHO_MATRIZ][TAMANHO_MATRIZ], score = 0, game_loop = 0, linhaAtual
 
 //game_loop = 0 -> jogo rolando
 //game_loop = 1 -> jogador ganhou (formou um quadrado 2048)
-//game_loop = 2 -> a matriz está cheia, mas ainda há pelo menos uma jogada possível
+//game_loop = 2 -> a matriz estÃ¡ cheia, mas ainda hÃ¡ pelo menos uma jogada possÃ­vel
 //game_loop = -1 -> jogador perdeu
-//score = pontuação do jogador
-//linhaAtual, colunaAtual = mostram qual foi a última posição em que houve um agrupamento de números
+//score = pontuaÃ§Ã£o do jogador
+//linhaAtual, colunaAtual = mostram qual foi a Ãºltima posiÃ§Ã£o em que houve um agrupamento de nÃºmeros
 
 char dir;
-//variável que dirá qual a direção em que o usuário quer que os números se movam (direita, esquerda, cima ou baixo (d, e, c, b))
+//variÃ¡vel que dirÃ¡ qual a direÃ§Ã£o em que o usuÃ¡rio quer que os nÃºmeros se movam (direita, esquerda, cima ou baixo (d, e, c, b))
 
 void botaZero();
-//inicializa a matriz com zeros, que representarão uma posição vazia
+//inicializa a matriz com zeros, que representarÃ£o uma posiÃ§Ã£o vazia
 void juntaNumeros(int linhaInicial, int colunaInicial, int linhaAlvo, int colunaAlvo);
-//função que agrupa números iguais quando possível
+//funÃ§Ã£o que agrupa nÃºmeros iguais quando possÃ­vel
 void iniciaMatriz();
-//gera duas posições na matriz e as preenche com o número 2
+//gera duas posiÃ§Ãµes na matriz e as preenche com o nÃºmero 2
 void imprimeMatriz();
-//imprime a matriz do jogo para o usuário
+//imprime a matriz do jogo para o usuÃ¡rio
 void gameLoop();
-//função que lerá o input do usuário enquanto for possível jogar
+//funÃ§Ã£o que lerÃ¡ o input do usuÃ¡rio enquanto for possÃ­vel jogar
 int checaVitoriaDerrota();
-//retornará 1 se o usuário ganhar, 0 se ainda ha jogo e -1 se ele perdeu
+//retornarÃ¡ 1 se o usuÃ¡rio ganhar, 0 se ainda ha jogo e -1 se ele perdeu
 int checaColuna(int linha, int dir);
 int checaLinha(int coluna, int dir);
 
@@ -102,18 +102,18 @@ void gameLoop() {
 					
 					if(matriz[j][i] > 0)
 					{
-						//Tem algo na posição atual...
+						//Tem algo na posiÃ§Ã£o atual...
 						if(pos < j && pos > -1)
 							if(pos > 0)
 								if(matriz[pos - 1][i] == matriz[j][i] && ((pos - 1) != linhaAtual || i != colunaAtual) )
 								{
-									//Se o número logo acima da posição retornada for igual ao número da posição atual
+									//Se o nÃºmero logo acima da posiÃ§Ã£o retornada for igual ao nÃºmero da posiÃ§Ã£o atual
 									juntaNumeros(j, i, pos - 1, i);
 									cont++;
 								}
 								else
 								{
-									//Se não há nenhum número na coluna acima da posição atual
+									//Se nÃ£o hÃ¡ nenhum nÃºmero na coluna acima da posiÃ§Ã£o atual
 									matriz[pos][i] = matriz[j][i];
 									matriz[j][i] = 0;
 									cont++;
@@ -341,7 +341,7 @@ void gameLoop() {
     }
 
     int checaVitoriaDerrota() {
-      int i, j, ret = 0, cont = 0;
+      int i, j, ret = 0, cont = 0, contJogadasPossiveis = 0;
 
       for (i = 0; i < TAMANHO_MATRIZ; i++) {
         for (j = 0; j < TAMANHO_MATRIZ; j++) {
@@ -358,7 +358,31 @@ void gameLoop() {
       }
 
       if (cont == TAMANHO_MATRIZ * TAMANHO_MATRIZ)
-       ret = -1;
+	  {
+       for(i = 0; i < TAMANHO_MATRIZ; i++)
+       {
+       		for(j = 0; j < TAMANHO_MATRIZ; j++)
+       		{
+       			if(j > 0)
+				   if(matriz[i][j - 1] == matriz[i][j])
+				   	contJogadasPossiveis++;	
+				if(j < 3)
+					if(matriz[i][j + 1] == matriz[i][j])
+				   		contJogadasPossiveis++;	
+				if(i > 0)
+					if(matriz[i - 1][j] == matriz[i][j])
+						contJogadasPossiveis++;	
+				if(i < 3)
+					if(matriz[i + 1][j] == matriz[i][j])
+						contJogadasPossiveis++;	
+			}
+	   }
+	   
+	   if(contJogadasPossiveis > 0)
+	   	ret = 2;
+	   else
+	   	ret = -1;
+   	}
 
       return ret;
     }
