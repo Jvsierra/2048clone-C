@@ -292,15 +292,15 @@ void gameLoop() {
     void imprimeMatriz() {
       int i, j;
 
-	  clrscr();
-	  textcolor(15);	
+	  clrscr();	
       printf("\n\t\t\tSCORE:%d\t\t\n", score);
-
+      
       for (i = 0; i < TAMANHO_MATRIZ; i++) {
-      	
         for (j = 0; j < TAMANHO_MATRIZ; j++) {
+        	
             if(matriz[i][j] == 0)
 			{
+				textbackground(15);
 				textcolor(5);
                 printf("     .     ");
 			}
@@ -308,29 +308,60 @@ void gameLoop() {
 			{
                 if(matriz[i][j] == 2)
                 {
+                	textbackground(1);
         			textcolor(15);
 				}
         		else if(matriz[i][j] == 4)
+				{
+					textbackground(3);
 					textcolor(6);
+				}
 				else if(matriz[i][j] == 8)
+				{
+					textbackground(6);
 					textcolor(4);
+				}
 				else if(matriz[i][j] == 16)	
-        			textcolor(12);	
+        		{
+        			textbackground(8);
+					textcolor(12);	
+				}	
         		else if(matriz[i][j] == 32)
+        		{
+        			textbackground(9);
         			textcolor(7);
+				}
         		else if(matriz[i][j] == 64)
+        		{
+        			textbackground(13);
         			textcolor(11);
+				}
         		else if(matriz[i][j] == 128)
+        		{
+        			textbackground(12);
         			textcolor(14);
+				}
         		else if(matriz[i][j] == 256)
+        		{
+        			textbackground(14);
         			textcolor(13);
+				}
         		else if(matriz[i][j] == 512)
+        		{
+        			textbackground(7);
         			textcolor(2);
+				}
         		else if(matriz[i][j] == 1024)
+        		{
+        			textbackground(4);
         			textcolor(3);
+				}
         		else if(matriz[i][j] == 2048)
+        		{
+        			textbackground(2);
         			textcolor(5);
-        		
+				}
+
         		printf("     %d     ", matriz[i][j]);
 			}
 		}
@@ -338,6 +369,7 @@ void gameLoop() {
       }
       
       textcolor(15);
+      textbackground(0);
     }
 
     int checaVitoriaDerrota() {
