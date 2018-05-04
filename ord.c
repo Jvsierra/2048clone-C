@@ -4,9 +4,15 @@
 #include <time.h>
 #include "meuconio.h"
 
+
 //2048
 
 #define TAMANHO_MATRIZ 4
+#define C 72
+#define B 80
+#define D 77
+#define E 75
+
 
 int matriz[TAMANHO_MATRIZ][TAMANHO_MATRIZ], score = 0, game_loop = 0, linhaAtual = -1, colunaAtual = -1;
 
@@ -36,6 +42,8 @@ int checaColuna(int linha, int dir);
 int checaLinha(int coluna, int dir);
 
 int main() {
+
+	
   srand(time(NULL));
 
   int res;
@@ -85,73 +93,42 @@ void gameLoop() {
     int fim = 0, i, j, pos, cont = 0;
 
     fim = checaVitoriaDerrota();
-    
-    fflush(stdin);
-    
-    scanf("%c", &dir);
 
-    while (fim == 0)
+    while (fim == 0 || fim == 2)
 	  {
-      	if(dir == 'c' || dir == 'C')
-      	{
-      		for(i = 0; i < TAMANHO_MATRIZ; i++)
-			{
-				for(j = 0; j < TAMANHO_MATRIZ; j++)
+		  	 
+	    dir = getch();
+	    
+	    if(dir == -32)
+	    {
+	    	dir = getch();
+	  	
+	      	if(dir == C)
+	      	{
+	      		for(i = 0; i < TAMANHO_MATRIZ; i++)
 				{
-					pos = checaLinha(i, -1);
-					
-					if(matriz[j][i] > 0)
+					for(j = 0; j < TAMANHO_MATRIZ; j++)
 					{
-						//Tem algo na posição atual...
-						if(pos < j && pos > -1)
-							if(pos > 0)
-								if(matriz[pos - 1][i] == matriz[j][i] && ((pos - 1) != linhaAtual || i != colunaAtual) )
-								{
-									//Se o número logo acima da posição retornada for igual ao número da posição atual
-									juntaNumeros(j, i, pos - 1, i);
-									cont++;
-								}
-								else
-								{
-									//Se não há nenhum número na coluna acima da posição atual
-									matriz[pos][i] = matriz[j][i];
-									matriz[j][i] = 0;
-									cont++;
-								}
-							else
-							{
-								matriz[pos][i] = matriz[j][i];
-								matriz[j][i] = 0;
-								cont++;
-							}
-						else
-							if(j > 0)
-								if(matriz[j][i] == matriz[j - 1][i] && ((j - 1) != linhaAtual || i != colunaAtual))
-								{
-									juntaNumeros(j, i, j - 1, i);
-									cont++;
-								}
-					}	
-				}
-			}	
-		}
-		else if(dir == 'b' || dir == 'B')
-		{
-			for(i = TAMANHO_MATRIZ - 1; i >= 0; i--)
-			{
-				for(j = TAMANHO_MATRIZ - 1; j >= 0; j--)
-				{
-					if(matriz[j][i] > 0)
-					{
-						pos = checaLinha(i, 1);
-						if(pos > j)
+						pos = checaLinha(i, -1);
+						
+						if(matriz[j][i] > 0)
 						{
-							if(pos < 3)
-								if(matriz[pos + 1][i] == matriz[j][i]  && ((pos + 1) != linhaAtual || i != colunaAtual))
-								{
-									juntaNumeros(j, i, pos + 1, i);
-									cont++;
-								}
+							//Tem algo na posição atual...
+							if(pos < j && pos > -1)
+								if(pos > 0)
+									if(matriz[pos - 1][i] == matriz[j][i] && ((pos - 1) != linhaAtual || i != colunaAtual) )
+									{
+										//Se o número logo acima da posição retornada for igual ao número da posição atual
+										juntaNumeros(j, i, pos - 1, i);
+										cont++;
+									}
+									else
+									{
+										//Se não há nenhum número na coluna acima da posição atual
+										matriz[pos][i] = matriz[j][i];
+										matriz[j][i] = 0;
+										cont++;
+									}
 								else
 								{
 									matriz[pos][i] = matriz[j][i];
@@ -159,103 +136,138 @@ void gameLoop() {
 									cont++;
 								}
 							else
+								if(j > 0)
+									if(matriz[j][i] == matriz[j - 1][i] && ((j - 1) != linhaAtual || i != colunaAtual))
+									{
+										juntaNumeros(j, i, j - 1, i);
+										cont++;
+									}
+						}	
+					}
+				}	
+			}
+			else if(dir == B)
+			{
+				for(i = TAMANHO_MATRIZ - 1; i >= 0; i--)
+				{
+					for(j = TAMANHO_MATRIZ - 1; j >= 0; j--)
+					{
+						if(matriz[j][i] > 0)
+						{
+							pos = checaLinha(i, 1);
+							if(pos > j)
 							{
-								matriz[pos][i] = matriz[j][i];
-								matriz[j][i] = 0;
-								cont++;
-							}
-						}
-						else
-							if(j < 3)
-								if(matriz[j + 1][i] == matriz[j][i]  && ((j + 1) != linhaAtual || i != colunaAtual))
+								if(pos < 3)
+									if(matriz[pos + 1][i] == matriz[j][i]  && ((pos + 1) != linhaAtual || i != colunaAtual))
+									{
+										juntaNumeros(j, i, pos + 1, i);
+										cont++;
+									}
+									else
+									{
+										matriz[pos][i] = matriz[j][i];
+										matriz[j][i] = 0;
+										cont++;
+									}
+								else
 								{
-									juntaNumeros(j, i, j + 1, i);
+									matriz[pos][i] = matriz[j][i];
+									matriz[j][i] = 0;
 									cont++;
 								}
+							}
+							else
+								if(j < 3)
+									if(matriz[j + 1][i] == matriz[j][i]  && ((j + 1) != linhaAtual || i != colunaAtual))
+									{
+										juntaNumeros(j, i, j + 1, i);
+										cont++;
+									}
+						}
 					}
 				}
 			}
-		}
-		else if(dir == 'e' || dir == 'e')
-		{
-			for(i = 0; i < TAMANHO_MATRIZ; i++)
+			else if(dir == E)
 			{
-				for(j = 0; j < TAMANHO_MATRIZ; j++)
+				for(i = 0; i < TAMANHO_MATRIZ; i++)
 				{
-					pos = checaColuna(i, -1);
-					
-					if(matriz[i][j] > 0)
+					for(j = 0; j < TAMANHO_MATRIZ; j++)
 					{
-						if(pos < j && pos > -1)
+						pos = checaColuna(i, -1);
+						
+						if(matriz[i][j] > 0)
 						{
-							if(pos > 0)
-								if(matriz[i][pos - 1] == matriz[i][j] && (i != linhaAtual || (pos - 1) != colunaAtual))
-								{
-									juntaNumeros(i, j, i, pos - 1);
-									cont++;
-								}
+							if(pos < j && pos > -1)
+							{
+								if(pos > 0)
+									if(matriz[i][pos - 1] == matriz[i][j] && (i != linhaAtual || (pos - 1) != colunaAtual))
+									{
+										juntaNumeros(i, j, i, pos - 1);
+										cont++;
+									}
+									else
+									{
+										matriz[i][pos] = matriz[i][j];
+										matriz[i][j] = 0;
+										cont++;
+									}
 								else
 								{
 									matriz[i][pos] = matriz[i][j];
 									matriz[i][j] = 0;
 									cont++;
 								}
-							else
-							{
-								matriz[i][pos] = matriz[i][j];
-								matriz[i][j] = 0;
-								cont++;
 							}
+							else
+								if(j > 0)
+									if(matriz[i][j] == matriz[i][j - 1] && (i != linhaAtual || (j - 1) != colunaAtual))
+									{
+										juntaNumeros(i, j, i, j - 1);
+										cont++;
+									}
 						}
-						else
-							if(j > 0)
-								if(matriz[i][j] == matriz[i][j - 1] && (i != linhaAtual || (j - 1) != colunaAtual))
-								{
-									juntaNumeros(i, j, i, j - 1);
-									cont++;
-								}
 					}
 				}
 			}
-		}
-		else if(dir == 'd' || dir == 'D')
-		{
-			for(i = TAMANHO_MATRIZ - 1; i >= 0; i--)
+			else if(dir == D)
 			{
-				for(j = TAMANHO_MATRIZ - 1; j >= 0; j--)
+				for(i = TAMANHO_MATRIZ - 1; i >= 0; i--)
 				{
-					pos = checaColuna(i, 1);
-					
-					if(matriz[i][j] > 0)
+					for(j = TAMANHO_MATRIZ - 1; j >= 0; j--)
 					{
-						if(pos > j)
+						pos = checaColuna(i, 1);
+						
+						if(matriz[i][j] > 0)
 						{
-							if(pos < 3)
-								if(matriz[i][j] == matriz[i][pos + 1] && (i != linhaAtual || (pos + 1) != colunaAtual))
-								{
-									juntaNumeros(i, j, i, pos+1);
-									cont++;
-								}
+							if(pos > j)
+							{
+								if(pos < 3)
+									if(matriz[i][j] == matriz[i][pos + 1] && (i != linhaAtual || (pos + 1) != colunaAtual))
+									{
+										juntaNumeros(i, j, i, pos+1);
+										cont++;
+									}
+									else
+									{
+										matriz[i][pos] = matriz[i][j];
+										matriz[i][j] = 0;
+										cont++;
+									}
 								else
 								{
 									matriz[i][pos] = matriz[i][j];
 									matriz[i][j] = 0;
 									cont++;
 								}
-							else
-							{
-								matriz[i][pos] = matriz[i][j];
-								matriz[i][j] = 0;
-								cont++;
 							}
+							else
+								if(j < 3)
+									if(matriz[i][j] == matriz[i][j + 1] && (i != linhaAtual || (j + 1) != colunaAtual))
+									{
+										juntaNumeros(i, j, i, j+1);
+										cont++;
+									}
 						}
-						else
-							if(j < 3)
-								if(matriz[i][j] == matriz[i][j + 1] && (i != linhaAtual || (j + 1) != colunaAtual))
-								{
-									juntaNumeros(i, j, i, j+1);
-									cont++;
-								}
 					}
 				}
 			}
@@ -279,9 +291,7 @@ void gameLoop() {
           	 
           	imprimeMatriz();
 			
-			fflush(stdin);
 			
-			scanf("%c", &dir);	
 			
 			linhaAtual = -1;
 			colunaAtual = -1;		
@@ -297,18 +307,15 @@ void gameLoop() {
       printf("\n\t\t\tSCORE:%d\t\t\n", score);
       
       for (i = 0; i < TAMANHO_MATRIZ; i++) {
-      	gotoxy(20, 5+i);
+      	
         for (j = 0; j < TAMANHO_MATRIZ; j++) {
         	
             if(matriz[i][j] == 0)
 			{
 				textbackground(15);
 				textcolor(5);
-                printf("     .     ");
 			}
-			else
-			{
-                if(matriz[i][j] == 2)
+			else if(matriz[i][j] == 2)
                 {
                 	textbackground(1);
         			textcolor(15);
@@ -364,8 +371,12 @@ void gameLoop() {
         			textcolor(5);
 				}
 
-        		printf("     %d     ", matriz[i][j]);
-			}
+				gotoxy(20+10*j, 5+i);
+                printf("          ");
+                gotoxy(20+10*j+5, 5+i);
+                if(matriz[i][j] > 0)
+        			printf("%d", matriz[i][j]);
+			
 		}
         printf("\n\n");
       }
